@@ -1,7 +1,7 @@
 const config = {
   entry: {
-    app: "./src/app.js",
-    chart: "./src/expenseChart.js"
+    app: "./public/db.js"
+  
   },
   output: {
     path: __dirname + "/dist",
