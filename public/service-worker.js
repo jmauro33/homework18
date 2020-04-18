@@ -1,13 +1,17 @@
+//const for files that need to be cached
 const FILES_TO_CACHE = [
-  "/","/index.html","index.js","/db.js","/style.css"]
+  "/","/index.html",
+  "index.js",
+  "/db.js",
+  "/style.css"]
+
 const CACHE_NAME = "static-cache-v2";
 const DATA_CACHE_NAME = "data-cache-v1";
-
-
+// code for installing service working on app
 self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log("Your files were pre-cached successfully!");
+      console.log("pre-cache completed successfully!");
       return cache.addAll(FILES_TO_CACHE);
     })
   );
@@ -30,9 +34,9 @@ elf.addEventListener("activate", function(event) {
   self.clients.claim();
 });
 
-// fetch
+// fetch server 
 self.addEventListener("fetch", event => {
-  if(evt.request.url.includes('/api/')) {
+  if(event.request.url.includes('/api/')) {
       console.log('[Service Worker] Fetch(data)', event.request.url);
   
 evt.respondWith(
@@ -45,13 +49,13 @@ evt.respondWith(
                   return response;
               })
               .catch(err => {
-                  return cache.match(evt.request);
+                  return cache.match(event.request);
               });
           })
           );
           return;
       }
-//response to service worker
+//response to service worker when being run
 event.respondWith(
   caches.open(CACHE_NAME).then( cache => {
     return cache.match(event.request).then(response => {
